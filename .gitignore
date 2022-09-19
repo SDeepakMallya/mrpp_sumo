@@ -3,4 +3,4 @@ config/*
 !config/test.yaml
 # *.csv
 post_process/*
-scripts/algorithms/partition_based_patrolling/*
+# scripts/algorithms/partition_based_patrolling/*
