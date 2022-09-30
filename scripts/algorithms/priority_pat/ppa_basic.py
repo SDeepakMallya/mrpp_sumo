@@ -86,7 +86,6 @@ def all_valid_trails(graph, node_set, depth, folder, graph_name):
     for i in range(len(node_set)):
         compute_valid_trails(graph_name, graph, node_set[i], depth, folder, node_set)
 
-
 class PPABasic:
 
     '''
