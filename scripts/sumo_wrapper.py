@@ -14,6 +14,7 @@ import traci
 import configparser as CP
 import random as rn
 import time
+# import pandas as pd
 
 from rosgraph_msgs.msg import Clock
 
@@ -41,6 +42,9 @@ class Sumo_Wrapper:
         self.next_task_service = rospy.ServiceProxy('bot_next_task', NextTaskBot)
         self.output_file = open(output_file, 'a+')
         self.output_file1 = open(output_file1, 'a+')
+        # self.df1 = pd.DataFrame(columns = ['time_stamp', 'robot_id', 'tasks', 'departs'])
+        # self.df2 = pd.DataFrame(columns = ['time_stamp', 'node_ids', 'robot_ids'])
+        
         self.robots_in_traci = []
 
     #Adding bot at a specified location and then specifying its task
@@ -77,6 +81,7 @@ class Sumo_Wrapper:
         self.output_file.write(str(vehicle) + "\n")
         self.output_file.write(' '.join(map(str, task_update.task)) + '\n')
         self.output_file.write(' '.join(map(str, task_update.departs)) + '\n')
+        
         for i in range(len(task_update.task) - 1):
             route.append(self.graph[task_update.task[i]][task_update.task[i + 1]]['name'])
             departs.append(float(task_update.departs[i]))
@@ -114,6 +119,8 @@ def main():
         print ("{} robots are yet to be initialized".format(init_bots - len(s.robots)))
 
     time.sleep(1.0)
+    sim_time = 0
+    sim_delta = 0.1
     while not done:
         done = rospy.get_param('done')
         s.stamp = traci.simulation.getTime()
@@ -192,8 +199,17 @@ def main():
                 s.output_file1.write(str(s.stamp) + '\n')
                 s.output_file1.write(' '.join(map(str, msg.node_id)) + '\n')
                 s.output_file1.write(' '.join(map(str, msg.robot_id)) + '\n')
+            
 
-            traci.simulationStep()
+            max_vel = 10.
+            short_edge = 100000000.
+            for robot in s.robots_in_traci:
+                short_edge = min(traci.lane.getLength(traci.vehicle.getRoute(vehID = robot)[-1] + '_0'), short_edge)
+            short_time = short_edge/max_vel
+            if abs(short_edge - 100000000.) <= 1:
+                short_time = 0
+            sim_time += max(round(short_time/4., 1), 0.1)
+            traci.simulationStep(sim_time)
     s.output_file.close()
     s.output_file1.close()
     traci.close()

@@ -11,7 +11,7 @@ import shutil
 import rospkg
 import yaml
 import networkx as nx
-import pandas as pd
+# import pandas as pd
 import csv
 
 def main(config_path):
