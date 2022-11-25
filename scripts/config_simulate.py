@@ -2,13 +2,16 @@
 
 import configparser as CP
 import os
+import sys
 import rospkg
 import glob
 import rosparam
 
 # missed = [97, 96, 95, 86, 83, 78, 44, 12]
+alg = sys.argv[1]
+depth = sys.argv[2]
 dir_name = rospkg.RosPack().get_path('mrpp_sumo')
-config_files = glob.glob(dir_name + '/config/ppa_basic_10_3/*.yaml')
+config_files = glob.glob(dir_name + '/config/{}/depth_{}/*.yaml'.format(alg,depth))
 count = 0
 for conf in config_files:
 # for i in missed:

@@ -8,6 +8,7 @@ appropriate yaml files in config directory
 '''
 
 import sys, os
+import numpy
 import rospkg
 import random as rn
 import tpbp_functions as fn
@@ -24,21 +25,26 @@ else:
     dirname += '/config/'
 
 
-    conf_files = glob.glob(dirname + file_str + '/{}*'.format(file_str))
-
+    conf_files = glob.glob(dirname  + '{}/depth_0/*'.format('ppa_greedy'))
+    print(dirname  + '{}/depth_0/*'.format('ppa_greedy'))
     i = 0
+    count = 0
     for c in conf_files:
-        print(c)
+        # print(c)
         with open(c, 'r') as f:
             p = yaml.safe_load(f)
         p['algo_name'] = alg_name
-        p['parameters'] = ' '.join(parameters)
+        n = len(p['priority_nodes'].split(' '))
+        p['parameters'] = ' '.join(parameters) + " {}".format(numpy.ceil(n/2))
+        i = c.split("_")[-2]
         name_add = '_'.join(parameters)
-        p['random_string'] = alg_name + '_' + name_add + '_' + str(i)
-        dir_path = dirname + alg_name + '_' + name_add
+        p['random_string'] = alg_name + '_' + p['graph'] + '_' + str(i) + '_' + name_add
+        dir_path = dirname + alg_name + '/depth_' + name_add
         if not os.path.isdir(dir_path):
             os.mkdir(dir_path)
-        with open(dirname + alg_name + '_' + name_add + '/{}.yaml'.format(p['random_string']), 'w') as f:
-            cur = yaml.dump(p, f)
-        i += 1
-    
+
+        with open(dirname + alg_name + '/depth_' + name_add + '/{}.yaml'.format(p['random_string']), 'w') as f:
+            cur = yaml.dump(p, f)\
+            # break
+        count += 1
+        print(count)
