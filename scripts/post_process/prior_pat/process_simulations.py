@@ -6,9 +6,10 @@ import glob
 import sys
 
 
-def main(string):
+def main(alg_name,depth):
     dir_name = rospkg.RosPack().get_path('mrpp_sumo')
-    config_files = glob.glob(dir_name + '/config/{}/{}*.yaml'.format(string, string))
+    config_files = glob.glob(dir_name + '/config/{}/depth_{}/*.yaml'.format(alg_name, depth))
+    print(dir_name + '/config/{}/depth_{}*.yaml'.format(alg_name, depth))
     count = 0
     for conf in config_files:
         # path = conf.split('/')
@@ -19,4 +20,4 @@ def main(string):
         print ('{} Done'.format(count))
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main(sys.argv[1],sys.argv[2])

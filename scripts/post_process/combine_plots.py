@@ -21,19 +21,10 @@ def main(param):
     dirname = rospkg.RosPack().get_path('mrpp_sumo')
     name = param[0]
     g = param[1]
-    # edges = [graph[e[0]][e[1]]['name'] for e in list(graph.edges())]
-
-    # tpbp_df=pd.read_csv(dirname+'/{}.csv'.format(name))
     plt.figure()
     sns.set_style('white')
     sns.set_context(font_scale= 1, rc = {"font.size" : 15, "axes.titlesize" : 20})
-    # for i in tpbp_df['random_string']:
-    # for i in range(1,12,3):
-    # algos=['tpbp_final','tpbp_alt1_1','tpbp_util','tpbp_util1_1']
-    # algos = ['tpbp_util1_1','tpbp_util1_3','tpbp_util1_5','tpbp_util']
-    # algos = ['through_modified_basic_1','through_modified_basic_3','through_modified_basic_5']
-    algos = ['through_basic_5']
-    # algos = ['tpbp_final', 'tpbp_util', 'through_modified_FHUM_5', 'through_modified_basic_5']
+    algos = ['ppa_random','ppa_greedy','ppa_exhaustive','ppa_sampled']
     colors =['red','blue','green']
     fig,axes = plt.subplots(3,4,figsize=(30,15))
     i=24
